@@ -100,15 +100,15 @@ jobs:
       - name: List release artifacts
         if: always()
         run: |
-          ls -l ./release
-          tree ./release
+          ls -l ./target
+          tree ./target
 
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: release
-          path: ./release
+          path: ./target
 
       # - uses: shallwefootball/s3-upload-action@master
       #   name: Upload To S3
