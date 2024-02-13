@@ -3,6 +3,7 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+set -o xtrace
 
 PWD="$(dirname $(readlink -f -- $0))"
 
@@ -258,19 +259,25 @@ if [ "$OS" = "macos" ]; then
 elif [ "$OS" = "linux" ]; then
 	APPIMAGE="$(find $BUNDLE_DIR/appimage -name \*.AppImage)"
 	APPIMAGE_UPDATER="$(find $BUNDLE_DIR/appimage -name \*.AppImage.tar.gz)"
+	APPDIR="$(find $BUNDLE_DIR/appimage -name \*.AppDir)"
 	APPIMAGE_UPDATER_SIG="$(find $BUNDLE_DIR/appimage -name \*.AppImage.tar.gz.sig)"
 	DEB="$(find $BUNDLE_DIR/deb -name \*.deb)"
+
+    tar --exclude=usr/bin/xdg-open --exclude=usr/lib --exclude=usr/share/doc --exclude=usr/share/glib-2.0 -zcvf "$BUNDLE_DIR/gitbutler.tar.gz" -C "$APPDIR" usr || true
+    TAR=$(find $BUNDLE_DIR -name gitbutler.tar.gz) || true
 
 	cp "$APPIMAGE" "$RELEASE_DIR"
 	cp "$APPIMAGE_UPDATER" "$RELEASE_DIR"
 	cp "$APPIMAGE_UPDATER_SIG" "$RELEASE_DIR"
 	cp "$DEB" "$RELEASE_DIR"
+    cp "$TAR" "$RELEASE_DIR" || true
 
 	info "built:"
 	info "  - $RELEASE_DIR/$(basename "$APPIMAGE")"
 	info "  - $RELEASE_DIR/$(basename "$APPIMAGE_UPDATER")"
 	info "  - $RELEASE_DIR/$(basename "$APPIMAGE_UPDATER_SIG")"
 	info "  - $RELEASE_DIR/$(basename "$DEB")"
+    info "  - $RELEASE_DIR/$(basename "$TAR")" || true
 fi
 
 info "done! bye!"
