@@ -32,8 +32,8 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - macos-latest # [macOs, x64]
-          - macos-latest-xlarge # [macOs, ARM64]
+          # - macos-latest # [macOs, x64]
+          # - macos-latest-xlarge # [macOs, ARM64]
           - ubuntu-20.04 # [linux, x64]
 
     runs-on: ${{ matrix.platform }}
