@@ -103,6 +103,13 @@ jobs:
           ls -l ./release
           tree ./release
 
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: ./release
+
       # - uses: shallwefootball/s3-upload-action@master
       #   name: Upload To S3
       #   id: S3
